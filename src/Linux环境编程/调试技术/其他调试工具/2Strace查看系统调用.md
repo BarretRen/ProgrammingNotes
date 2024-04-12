@@ -1,18 +1,15 @@
-
 # 1 简介
 
-strace是Linux环境下的一款程序调试工具，用来监察一个应用程序所使用的系统调用。在其最简单的形式中，它可以从开始到结束跟踪二进制的执行，并在进程的生命周期中输出一行具有系统调用名称，每个系统调用的参数和返回值的文本行。
-strace常用来跟踪进程执行时的系统调用和接收所接收的信号，在Linux中，进程不能直接访问硬件设备，当进程需要访问硬件设备的时候（如读取磁盘，接收网络数据的时候），必须由用户态模式切换至内核态模式，通过系统调用访问硬件设备。**strace可以跟踪到一个进程产生的系统调用，包括参数，返回值，执行消耗的时间**。
-
+strace 是 Linux 环境下的一款程序调试工具，用来监察一个应用程序所使用的系统调用。在其最简单的形式中，它可以从开始到结束跟踪二进制的执行，并在进程的生命周期中输出一行具有系统调用名称，每个系统调用的参数和返回值的文本行。
+strace 常用来跟踪进程执行时的系统调用和接收所接收的信号，在 Linux 中，进程不能直接访问硬件设备，当进程需要访问硬件设备的时候（如读取磁盘，接收网络数据的时候），必须由用户态模式切换至内核态模式，通过系统调用访问硬件设备。**strace 可以跟踪到一个进程产生的系统调用，包括参数，返回值，执行消耗的时间**。
 
 ## 1.1 命令选项
 
-
 - -c 统计每一系统调用的所执行的时间,次数和出错的次数等.
-- -d 输出strace关于标准错误的调试信息.
-- -f 跟踪由fork调用所产生的子进程.
-- -ff 如果提供-o filename,则所有进程的跟踪结果输出到相应的filename.pid中,pid是各进程的进程号.
-- -F 尝试跟踪vfork调用.在-f时,vfork不被跟踪.
+- -d 输出 strace 关于标准错误的调试信息.
+- -f 跟踪由 fork 调用所产生的子进程.
+- -ff 如果提供-o filename,则所有进程的跟踪结果输出到相应的 filename.pid 中,pid 是各进程的进程号.
+- -F 尝试跟踪 vfork 调用.在-f 时,vfork 不被跟踪.
 - -h 输出简要的帮助信息.
 - -i 输出系统调用的入口指针.
 - -q 禁止输出关于脱离的消息.
@@ -22,46 +19,42 @@ strace常用来跟踪进程执行时的系统调用和接收所接收的信号�
 - -ttt 微秒级输出,以秒了表示时间.
 - -T 显示每一调用所耗的时间.
 - -v 输出所有的系统调用.一些调用关于环境变量,状态,输入输出等调用由于使用频繁,默认不输出.
-- -V 输出strace的版本信息.
+- -V 输出 strace 的版本信息.
 - -x 以十六进制形式输出非标准字符串
 - -xx 所有字符串以十六进制形式输出.
-- -a column 设置返回值的输出位置.默认为40.
+- -a column 设置返回值的输出位置.默认为 40.
 - -e expr 指定一个表达式,用来控制如何跟踪.格式如下:
-- [qualifier=][!]value1[,value2]... ：qualifier只能是 trace,abbrev,verbose,raw,signal,read,write其中之一.value是用来限定的符号或数字.默认的 qualifier是 trace.感叹号是否* 定符号.例如:
-- -eopen等价于 -e trace=open,表示只跟踪open调用.而-etrace!=open表示跟踪除了open以外的其他调用.有两个特殊的符号 all 和 none.
-- 注意有些shell使用!来执行历史记录里的命令,所以要使用\.
-- -e trace=set 只跟踪指定的系统 调用.例如:-e trace=open,close,rean,write表示只跟踪这四个系统调用.默认的为set=all.
+- [qualifier=][!]value1[,value2]... ：qualifier 只能是 trace,abbrev,verbose,raw,signal,read,write 其中之一.value 是用来限定的符号或数字.默认的 qualifier 是 trace.感叹号是否\* 定符号.例如:
+- -eopen 等价于 -e trace=open,表示只跟踪 open 调用.而-etrace!=open 表示跟踪除了 open 以外的其他调用.有两个特殊的符号 all 和 none.
+- 注意有些 shell 使用!来执行历史记录里的命令,所以要使用\.
+- -e trace=set 只跟踪指定的系统 调用.例如:-e trace=open,close,rean,write 表示只跟踪这四个系统调用.默认的为 set=all.
 - -e trace=file 只跟踪有关文件操作的系统调用.
 - -e trace=process 只跟踪有关进程控制的系统调用.
 - -e trace=network 跟踪与网络有关的所有系统调用.
 - -e strace=signal 跟踪所有与系统信号有关的 系统调用
 - -e trace=ipc 跟踪所有与进程通讯有关的系统调用
-- -e abbrev=set 设定 strace输出的系统调用的结果集.-v 等与 abbrev=none.默认为abbrev=all.
+- -e abbrev=set 设定 strace 输出的系统调用的结果集.-v 等与 abbrev=none.默认为 abbrev=all.
 - -e raw=set 将指 定的系统调用的参数以十六进制显示.
-- -e signal=set 指定跟踪的系统信号.默认为all.如 signal=!SIGIO(或者signal=!io),表示不跟踪SIGIO信号.
+- -e signal=set 指定跟踪的系统信号.默认为 all.如 signal=!SIGIO(或者 signal=!io),表示不跟踪 SIGIO 信号.
 - -e read=set 输出从指定文件中读出 的数据.例如:
 - -e read=3,5
 - -e write=set 输出写入到指定文件中的数据.
-- -o filename 将strace的输出写入文件filename
-- -p pid 跟踪指定的进程pid.
-- -s strsize 指定输出的字符串的最大长度.默认为32.文件名一直全部输出.
-- -u username 以username 的UID和GID执行被跟踪的命令
+- -o filename 将 strace 的输出写入文件 filename
+- -p pid 跟踪指定的进程 pid.
+- -s strsize 指定输出的字符串的最大长度.默认为 32.文件名一直全部输出.
+- -u username 以 username 的 UID 和 GID 执行被跟踪的命令
 
-
-
-
-## 1.2 strace的功能
-
+## 1.2 strace 的功能
 
 - 它可以基于特定的系统调用或系统调用组进行过滤
 - 它可以通过统计特定系统调用的使用次数，所花费的时间，以及成功和错误的数量来分析系统调用的使用。
 - 它跟踪发送到进程的信号。
-- 可以通过pid附加到任何正在运行的进程。
+- 可以通过 pid 附加到任何正在运行的进程。
 - 调试性能问题，查看系统调用的频率，找出耗时的程序段
 - 查看程序读取的是哪些文件从而定位比如配置文件加载错误问题
 - 查看程序长时间运行“假死”情况
-- 当程序出现“Out of memory”时被系统发出的SIGKILL信息所kill
-- 另外因为strace拿到的是系统调用相关信息，一般也即是IO操作信息，这个对于排查比如cpu占用100%问题是无能为力的。这个时候就可以使用GDB工具了。
+- 当程序出现“Out of memory”时被系统发出的 SIGKILL 信息所 kill
+- 另外因为 strace 拿到的是系统调用相关信息，一般也即是 IO 操作信息，这个对于排查比如 cpu 占用 100%问题是无能为力的。这个时候就可以使用 GDB 工具了。
 
 ## 1.3 运行模式
 
@@ -70,12 +63,10 @@ strace 有两种运行模式:
 - 通过 strace 启动要跟踪的进程。用法很简单，在原本的命令前加上 strace 即可
 - 在不中断进程执行的情况下, 跟踪已经在运行的进程。 这种情况，给 strace 传递个`-p pid`选项即可
 
-
 ## 1.4 输出示例
 
-
 ```bash
-root@ubuntu:/usr# strace cat /dev/null 
+root@ubuntu:/usr# strace cat /dev/null
 execve("/bin/cat", ["cat", "/dev/null"], [/* 22 vars */]) = 0
 brk(0)                                  = 0xab1000
 access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No such file or directory)
@@ -97,7 +88,9 @@ exit_group(0) = ?
 每一行都是一条系统调用，等号左边是系统调用的函数名及其参数，右边是该调用的返回值。 strace 显示这些调用的参数并返回符号形式的值。strace 从内核接收信息，而且不需要以任何特殊的方式来构建内核。
 
 # 2 使用示例
-看下面代码，由于没有权限会导致fopen失败：
+
+看下面代码，由于没有权限会导致 fopen 失败：
+
 ```c
 #include <stdio.h>
 #include <stdlib.h>
@@ -114,7 +107,9 @@ int main()
     return EXIT_SUCCESS;
 }
 ```
-编译后尝试使用strace查看系统调用的具体错误：
+
+编译后尝试使用 strace 查看系统调用的具体错误：
+
 ```bash
 barret@Barret-PC:~$ strace -i ./a.out
 [00007fa5276b416b] execve("./a.out", ["./a.out"], 0x7ffeaeb94758 /* 26 vars */) = 0
@@ -157,6 +152,3 @@ barret@Barret-PC:~$ strace -i ./a.out
 [00007f8e60dc0136] exit_group(1)        = ?
 [????????????????] +++ exited with 1 +++
 ```
-
-
-
